@@ -99,13 +99,13 @@ type PresampledResampler struct {
 }
 
 // NewPresampledResampler returns a PresampledResampler that aggregates values using aggregator.
-func NewPresampledResampler(aggregator Aggregator, iterations int, maxNumValues int) *PresampledResampler {
+func NewPresampledResampler(aggregator Aggregator, iterations int, numValues int) *PresampledResampler {
 	r := rand.NewSource(0)
 	samples := make([][]int, iterations)
 	for i := range samples {
-		sampledInts := make([]int, maxNumValues)
-		for j := range sampledInts {
-			sampledInts[j] = int(r.Int63())
+		sampledInts := make([]int, numValues)
+		for _ = range sampledInts {
+			sampledInts[int(r.Int63())%numValues]++
 		}
 		samples[i] = sampledInts
 	}
@@ -124,7 +124,7 @@ func (r *PresampledResampler) Resample(values []float64) {
 	scratch := make([]float64, length)
 	for i := 0; i < r.iterations; i++ {
 		for j := range values {
-			scratch[j] = values[r.samples[i][j]%length]
+			scratch[j] = values[j] * float64(r.samples[i][j])
 		}
 		r.sampleAggregates = append(r.sampleAggregates, r.aggregator.Aggregate(scratch))
 	}
