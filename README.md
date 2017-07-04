@@ -4,4 +4,4 @@ This Go package provides a simple framework to bootstrap confidence intervals wi
 
 License
 ---
-BSD
+MIT
