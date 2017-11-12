@@ -56,7 +56,7 @@ func (a AverageAggregator) Aggregate(values []float64) float64 {
 	return result / float64(len(values))
 }
 
-// AverageAggregator generates a quantile.
+// QuantileAggregator generates a quantile.
 type QuantileAggregator struct {
 	quantile float64
 }
