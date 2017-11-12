@@ -8,7 +8,7 @@ import (
 
 // TestSum tests SumAggregator.
 func TestSum(t *testing.T) {
-	sum := SumAggregator{}
+	sum := NewSumAggregator()
 	aggregate := sum.Aggregate([]float64{0, 1, 2, 3, 4})
 	if aggregate != 10.0 {
 		t.Errorf("expected aggregate %f; got %f", 10.0, aggregate)
@@ -17,7 +17,7 @@ func TestSum(t *testing.T) {
 
 // TestAverage tests AverageAggregator.
 func TestAverage(t *testing.T) {
-	avg := AverageAggregator{}
+	avg := NewAverageAggregator()
 	aggregate := avg.Aggregate([]float64{0, 1, 2, 3, 4})
 	if aggregate != 2.0 {
 		t.Errorf("expected aggregate %f; got %f", 2.0, aggregate)
@@ -30,7 +30,7 @@ func TestAverage(t *testing.T) {
 
 // TestBasicResampler tests the resampler.
 func TestBasicResampler(t *testing.T) {
-	resampler := NewBasicResampler(SumAggregator{}, 2000)
+	resampler := NewBasicResampler(NewSumAggregator(), 2000)
 	resampler.r.Seed(0)
 	resampler.Resample([]float64{0, 1, 2, 3, 4})
 	if min := resampler.Quantile(0); min != 0.0 {
@@ -50,7 +50,7 @@ func TestBasicResampler(t *testing.T) {
 
 // TestPresampledResampler tests the resampler.
 func TestPresampledResampler(t *testing.T) {
-	resampler := NewPresampledResampler(SumAggregator{}, 2000, 5)
+	resampler := NewPresampledResampler(NewSumAggregator(), 2000, 5)
 	resampler.Resample([]float64{0, 1, 2, 3, 4})
 	if min := resampler.Quantile(0); min != 0.0 {
 		t.Errorf("expected min to be %f; got %f", 0.0, min)
@@ -68,7 +68,7 @@ func TestPresampledResampler(t *testing.T) {
 }
 
 func BenchmarkResampler(b *testing.B) {
-	resampler := NewBasicResampler(SumAggregator{}, b.N)
+	resampler := NewBasicResampler(NewSumAggregator(), b.N)
 	resampler.r.Seed(0)
 	sampleData := make([]float64, 1000)
 	for i := range sampleData {
@@ -79,7 +79,7 @@ func BenchmarkResampler(b *testing.B) {
 }
 
 func BenchmarkPresampledResampler(b *testing.B) {
-	resampler := NewPresampledResampler(SumAggregator{}, b.N, 1000)
+	resampler := NewPresampledResampler(NewSumAggregator(), b.N, 1000)
 	sampleData := make([]float64, 1000)
 	for i := range sampleData {
 		sampleData[i] = rand.Float64()

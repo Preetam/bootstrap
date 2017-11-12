@@ -21,6 +21,11 @@ type Resampler interface {
 // SumAggregator generates a sum.
 type SumAggregator struct{}
 
+// NewSumAggregator returns a new SumAggregator.
+func NewSumAggregator() SumAggregator {
+	return SumAggregator{}
+}
+
 // Aggregate returns the sum of values.
 func (a SumAggregator) Aggregate(values []float64) float64 {
 	result := 0.0
@@ -32,6 +37,11 @@ func (a SumAggregator) Aggregate(values []float64) float64 {
 
 // AverageAggregator generates an average.
 type AverageAggregator struct{}
+
+// NewAverageAggregator returns a new AverageAggregator.
+func NewAverageAggregator() AverageAggregator {
+	return AverageAggregator{}
+}
 
 // Aggregate returns the average of values.
 func (a AverageAggregator) Aggregate(values []float64) float64 {
