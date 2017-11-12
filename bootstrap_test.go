@@ -28,6 +28,29 @@ func TestAverage(t *testing.T) {
 	}
 }
 
+// TestQuantile tests QuantileAggregator.
+func TestQuantile(t *testing.T) {
+	qnt := NewQuantileAggregator(0.5)
+	aggregate := qnt.Aggregate([]float64{4, 3, 2, 1, 0})
+	if aggregate != 2.0 {
+		t.Errorf("expected aggregate %f; got %f", 2.0, aggregate)
+	}
+	qnt = NewQuantileAggregator(1.0)
+	aggregate = qnt.Aggregate([]float64{0, 1, 2, 3, 4})
+	if aggregate != 4.0 {
+		t.Errorf("expected aggregate %f; got %f", 4.0, aggregate)
+	}
+	qnt = NewQuantileAggregator(0.33)
+	aggregate = qnt.Aggregate([]float64{0, 1, 2, 3, 4})
+	if aggregate != 1.0 {
+		t.Errorf("expected aggregate %f; got %f", 1.0, aggregate)
+	}
+	aggregate = qnt.Aggregate([]float64{})
+	if !math.IsNaN(aggregate) {
+		t.Errorf("expected aggregate NaN; got %f", aggregate)
+	}
+}
+
 // TestBasicResampler tests the resampler.
 func TestBasicResampler(t *testing.T) {
 	resampler := NewBasicResampler(NewSumAggregator(), 2000)

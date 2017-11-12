@@ -56,6 +56,24 @@ func (a AverageAggregator) Aggregate(values []float64) float64 {
 	return result / float64(len(values))
 }
 
+// AverageAggregator generates a quantile.
+type QuantileAggregator struct {
+	quantile float64
+}
+
+// NewQuantileAggregator returns a new QuantileAggregator with the given quantile.
+func NewQuantileAggregator(quantile float64) QuantileAggregator {
+	return QuantileAggregator{
+		quantile: quantile,
+	}
+}
+
+// Aggregate returns the a.quantile quantile of values.
+func (a QuantileAggregator) Aggregate(values []float64) float64 {
+	sort.Float64s(values)
+	return quantile(values, a.quantile)
+}
+
 // BasicResampler is a basic bootstrap resampler.
 type BasicResampler struct {
 	aggregator       Aggregator
