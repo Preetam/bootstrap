@@ -6,12 +6,12 @@ import (
 	"sort"
 )
 
-// An Aggregator aggregates a slice of floats.
+// Aggregator aggregates a slice of floats.
 type Aggregator interface {
 	Aggregate(values []float64) float64
 }
 
-// A Resampler resamples floats with an Aggregator.
+// Resampler resamples floats with an Aggregator.
 type Resampler interface {
 	Resample(values []float64)
 	Quantile(float64) float64
