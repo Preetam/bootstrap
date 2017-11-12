@@ -132,7 +132,7 @@ func NewPresampledResampler(aggregator Aggregator, iterations int, numValues int
 	samples := make([][]int, iterations)
 	for i := range samples {
 		sampledInts := make([]int, numValues)
-		for _ = range sampledInts {
+		for range sampledInts {
 			sampledInts[int(r.Int63())%numValues]++
 		}
 		samples[i] = sampledInts
